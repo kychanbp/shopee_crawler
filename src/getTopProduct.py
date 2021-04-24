@@ -5,13 +5,11 @@
 import json
 import requests
 import pandas as pd
+from items import search_items
 
 import pdb
 
 def main():
-    search_items = [
-        "airpods%20pro%20case"
-    ]
 
     dfs = []
     for search_item in search_items:
@@ -24,7 +22,7 @@ def main():
 
 def search_bar(search_item):
 
-    url = f"https://shopee.sg/api/v4/search/search_items?by=relevancy&keyword={search_item}&limit=50&newest=0&order=desc&page_type=search&version=2"
+    url = f"https://shopee.my/api/v4/search/search_items?by=sales&keyword={search_item}&limit=50&newest=0&order=desc&page_type=search&version=2"
 
     payload={}
     headers = {
@@ -46,6 +44,7 @@ def search_bar(search_item):
     response = response.text
 
     df = search_bar_resposne_parse(response)
+    df['searsch_keywords'] = search_item
 
     return df
 
@@ -57,7 +56,6 @@ def search_bar_resposne_parse(res):
     items = res['items']
 
     df = pd.json_normalize(items)
-    pdb.set_trace()
 
     return df
 
